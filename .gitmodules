@@ -1,0 +1,3 @@
+[submodule "software"]
+	path = software
+	url = ssh://yexicong@192.168.168.132:/volume1/GitRepo/software.git
