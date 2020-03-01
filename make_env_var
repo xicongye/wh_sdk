@@ -1,0 +1,17 @@
+#### user change ####
+BOARD ?= LS_Board
+RELEASE ?= spike
+PROGRAM ?= coremark
+HOST_IP := localhost
+
+#### no change ####
+LINK_TARGET ?= link
+BSP_BASE := $(abspath wh_bsp)
+BOARD_DIR := $(abspath $(BSP_BASE)/env/$(BOARD))
+RELEASE_DIR := $(BOARD_DIR)/$(RELEASE)
+PROGRAM_DIR = $(abspath software/$(PROGRAM))
+OUTPUT_DIR = $(abspath output)
+SCRIPT_DIR = $(abspath script)
+WH_LIB = $(abspath wh_bsp/wh_lib)
+INCLUDE_DIR = $(abspath wh_bsp/include)
+
