@@ -49,7 +49,6 @@ RISCV_OBJCOPY := $(CROSS_COMPILE)-objcopy
 RISCV_GDB     := $(CROSS_COMPILE)-gdb
 RISCV_AR      := $(CROSS_COMPILE)-ar
 RISCV_SIZE    := $(CROSS_COMPILE)-size
-RISCV_OPENOCD := openocd
 SPIKE         := spike
 else
 RISCV_GCC     := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-gcc)
@@ -61,11 +60,14 @@ RISCV_AR      := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-ar)
 RISCV_SIZE    := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-size)
 RISCV_READELF := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-readelf)
 RISCV_AS      := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-as)
-RISCV_OPENOCD := $(abspath $(RISCV_PATH)/bin/openocd)
 SPIKE         := $(abspath $(RISCV_PATH)/bin/spike)
 endif
 
-
+ifeq ($(RISCV_OPENOCD),)
+RISCV_OPENOCD := openocd
+else
+RISCV_OPENOCD := $(abspath $(RISCV_OPENOCD)/bin/openocd)
+endif
 #################################################################################################
 #		This section is for Software Compilation
 #################################################################################################
