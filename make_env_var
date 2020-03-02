@@ -1,6 +1,6 @@
 #### user change ####
 BOARD ?= LS_Board
-RELEASE ?= spike
+RELEASE ?= WH32_IMC_XTX_2020_02_27
 PROGRAM ?= coremark
 HOST_IP := localhost
 

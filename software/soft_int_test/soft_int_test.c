@@ -29,7 +29,7 @@ int main(void)
     int_init();
     soft_int_enable();
     soft_int_bind_handler(SOFT_IRQ_Handler);
-    write_csr(mideleg, 0x00);
+    //write_csr(mideleg, 0x00);
     int_enable();
     while(1)
     {
