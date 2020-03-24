@@ -78,6 +78,11 @@ _start:
 	csrs mstatus, t0
 #endif
 
+#if __riscv_vector
+       li t0, MSTATUS_VS
+       csrs mstatus, t0
+#endif
+
 #ifndef __riscv_float_abi_soft
 	/* Enable FPU */
 	li t0, MSTATUS_FS
