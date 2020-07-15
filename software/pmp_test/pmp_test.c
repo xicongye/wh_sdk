@@ -23,17 +23,17 @@ int main(void)
 {
     printf("PMP TEST\r\n");
 
-    PMPConfig(0,   0x42000000, 0,   0,     0,    0,  0,  0); 
-    //       index    |        |    |      |     |   |   |
-    //               addr      |    |      |     |   |   |
-    //                        mask  |      |     |   |   |
-    //                             lock   mode   r   x   w
+    pmp_config(0,   0x42000000, 0,   0,     0,    0,  0,  0); 
+    //       index    |         |    |      |     |   |   |
+    //               addr       |    |      |     |   |   |
+    //                         mask  |      |     |   |   |
+    //                              lock   mode   r   x   w
 
-    PMPConfig(1,   0x43000000, 0,   1,    TOR,   1,  1,  0);
-    //       index    |        |    |      |     |   |   |
-    //               addr      |    |      |     |   |   |
-    //                        mask  |      |     |   |   |
-    //                             lock   mode   r   x   w
+    pmp_config(1,   0x43000000, 0,   1, PMP_TOR,   1,  1,  0);
+    //       index    |        |    |        |     |   |   |
+    //               addr      |    |        |     |   |   |
+    //                        mask  |        |     |   |   |
+    //                             lock     mode   r   x   w
 
     printf("Attempting to write to protected address\r\n");
     *mem_ptr = 6;

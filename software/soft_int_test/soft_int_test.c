@@ -25,17 +25,27 @@ void SOFT_IRQ_Handler()
 
 int main(void)
 {
+    int test_case = 0;
+
+    clear_csr(mip, MIP_MTIP);
     printf("M-Mode software interrupt test Start.\r\n");
     int_init();
     soft_int_enable();
     soft_int_bind_handler(SOFT_IRQ_Handler);
-    //write_csr(mideleg, 0x00);
+    write_csr(mideleg, 0x00);
     int_enable();
-    while(1)
+
+    while(test_case++ < 10)
     {
       soft_int_start();
       for(volatile int i = 0; i < 10000; i++)
          for(volatile int j = 0; j < 500; j++)
            continue;
     }
+
+    soft_int_disable();
+    int_disable();
+    printf("TEST DONE!\n");
+
+    return 0;
 }
