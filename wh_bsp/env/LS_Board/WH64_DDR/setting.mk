@@ -13,3 +13,4 @@ INT_NUM    := 16
 DCACHE_EN  := 1
 CORE_NUM   := 1
 ECII_EN    := 0
+CLKGATE_EN := 1

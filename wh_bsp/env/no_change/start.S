@@ -17,11 +17,10 @@ _start:
 .option pop
 	la sp, _sp
 
-  la  tp, _end + 63
-  and tp, tp, -64
+        la  tp, _end + 63
+        and tp, tp, -64
 
-#ifdef ON_SPIKE
-#else
+#if defined(ENABLE_CLKGATE)
         csrw 0x7c1, 0x0
 #endif
 

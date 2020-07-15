@@ -63,6 +63,11 @@ CFLAGS += -DENABLE_DCACHE
 else
 endif
 
+ifeq ($(CLKGATE_EN), 1)
+CFLAGS += -DENABLE_CLKGATE
+else
+endif
+
 # Generate ELF file, ASM file, MEM file, HEX file, MAP file, ELF information file
 software: clean pre_process $(TARGET).elf $(TARGET).asm PRINT_SIZE
 
