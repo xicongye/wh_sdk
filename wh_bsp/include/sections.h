@@ -15,5 +15,6 @@ extern unsigned char _ebss[];
 extern unsigned char _end[];
 extern unsigned char _sp[];
 extern unsigned char _mem_base[];
+extern unsigned char _heap_end[];
 
 #endif /* _SECTIONS_H */

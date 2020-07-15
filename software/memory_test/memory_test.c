@@ -19,12 +19,12 @@
 
 int main(void)
 {
-   volatile unsigned int * MEM_BASE = (volatile unsigned int *)(_sp);
+   volatile unsigned int * MEM_BASE = (volatile unsigned int *)(_heap_end);
    volatile unsigned int * ptr;
    volatile unsigned int sum = 0;
    volatile unsigned int loop = 0;
 
-   printf("Leave %p ~ %p alone\r\n", _mem_base, _sp);
+   printf("Leave %p ~ %p alone\r\n", _mem_base, MEM_BASE);
    printf("-------TEST START-----------------------\r\n");
    for(loop = 0; loop < 63; loop++) 
    {
