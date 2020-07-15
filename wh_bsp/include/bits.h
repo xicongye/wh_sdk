@@ -2,8 +2,8 @@
 #ifndef _RISCV_BITS_H
 #define _RISCV_BITS_H
 
-#define likely(x) __builtin_expect((x), 1)
-#define unlikely(x) __builtin_expect((x), 0)
+//#define likely(x) __builtin_expect((x), 1)
+//#define unlikely(x) __builtin_expect((x), 0)
 
 #define ROUNDUP(a, b) ((((a)-1)/(b)+1)*(b))
 #define ROUNDDOWN(a, b) ((a)/(b)*(b))

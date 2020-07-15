@@ -2,7 +2,7 @@
 #include <sys/time.h>
 #include "platform.h"
 
-int _gettimeofday(struct timeval *tp, void *tzp)
+int __wrap__gettimeofday(struct timeval *tp, void *tzp)
 {
     unsigned long long mcc, timebase;
 

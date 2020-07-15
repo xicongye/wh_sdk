@@ -163,13 +163,6 @@ void set_timer_val(uint64_t value)
 ********************************************************************/
 uint64_t get_timer_val(void)
 {
-/*
-    uint64_t low,high;
-    low = CLINT_REG(LOCAL_INT_MTIME);
-    high = CLINT_REG(LOCAL_INT_MTIME+4);
-    
-    return (((high<<31)<<1) | low);
-*/
     return MTIME;
 }
 
@@ -182,13 +175,6 @@ uint64_t get_timer_val(void)
 ********************************************************************/
 void set_timer_cmp(uint64_t value)
 {
-/*
-    uint64_t low,high;
-    low=value%(uint64_t)LOCAL_32BIT_MAX;
-    high=value/(uint64_t)LOCAL_32BIT_MAX; 
-    CLINT_REG(LOCAL_INT_MTIMECMP) = (uint32_t)low;
-    CLINT_REG(LOCAL_INT_MTIMECMP+4) = (uint32_t)high;
-*/
     MTIMECMP = value;
 }
 

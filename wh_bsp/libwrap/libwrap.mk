@@ -45,7 +45,7 @@ LIBWRAP_OBJS := $(LIBWRAP_SRCS:.c=.o)
 LIBWRAP_SYMS :=  free \
 	_open _lseek _read _write _fstat _stat _close _link _unlink \
 	_execve _fork _getpid _kill _wait \
-	_isatty _times _sbrk _exit puts gettimeofday
+	_isatty _times _sbrk _exit puts _gettimeofday
 
 LIBWRAP := $(LIBWRAP_DIR)/libwrap.a
 

@@ -17,7 +17,7 @@
 uint64_t val_pre[32] = {0};
 uint64_t val_new[32] = {0};
 
-void PMU_CounterEnable(int Priv, int Idx) {
+void pmu_counter_enable(int Priv, int Idx) {
   int value = 1 << Idx;
   if (Priv == M_MODE)
    set_csr(mcounteren,value);
@@ -27,7 +27,7 @@ void PMU_CounterEnable(int Priv, int Idx) {
 }
 
 
-void PMU_CounterDisable(int Priv, int Idx) {
+void pmu_counter_disable(int Priv, int Idx) {
   int value = 1 << Idx;
   if (Priv == M_MODE)
     clear_csr(mcounteren,value);
@@ -36,7 +36,7 @@ void PMU_CounterDisable(int Priv, int Idx) {
   return;
 }
 
-void PMU_SetEventMonitor(int Idx, int EventClass, int Event) {
+void pmu_set_event_monitor(int Idx, int EventClass, int Event) {
   int value = EventClass & PMU_EVENT_CLASS_MASK | Event & PMU_EVENT_MASK;
   switch (Idx) {
     case 0x03: write_csr(mhpmevent3,value);break;
@@ -72,7 +72,7 @@ void PMU_SetEventMonitor(int Idx, int EventClass, int Event) {
   }
 }
 
-void PMU_ClearEventMonitor(int Idx) {
+void pmu_clear_event_monitor(int Idx) {
   switch (Idx) {
     case 0x03: write_csr(mhpmevent3,0);break;
     case 0x04: write_csr(mhpmevent4,0);break;
@@ -108,7 +108,7 @@ void PMU_ClearEventMonitor(int Idx) {
 }
 
 
-void PMU_ClearAllEventMonitor(void) {
+void pmu_clear_all_event_monitor(void) {
     asm volatile( "csrw mhpmevent3, zero");
     asm volatile( "csrw mhpmevent4, zero");
     asm volatile( "csrw mhpmevent5, zero");
@@ -140,7 +140,7 @@ void PMU_ClearAllEventMonitor(void) {
     asm volatile( "csrw mhpmevent31, zero");
 }
 
-uint64_t PMU_ReadCounter(int Priv, int Idx) {
+uint64_t pmu_read_counter(int Priv, int Idx) {
   unsigned long lo;
   unsigned long hi;
 
@@ -546,7 +546,7 @@ uint64_t PMU_ReadCounter(int Priv, int Idx) {
 }
 
 
-int PMU_EnableAllCounter(int Priv)
+int pmu_enable_all_counter(int Priv)
 {
   if (Priv == M_MODE)
    write_csr(mcounteren, -1);
@@ -554,7 +554,7 @@ int PMU_EnableAllCounter(int Priv)
    write_csr(scounteren, -1);
 }
 
-int PMU_DisableAllCounter(int Priv)
+int pmu_disable_all_counter(int Priv)
 {
   if (Priv == M_MODE)
    write_csr(mcounteren, 0);
@@ -562,51 +562,51 @@ int PMU_DisableAllCounter(int Priv)
    write_csr(scounteren, 0);
 }
 
-void PMU_SetupAllEvent(void)
+void pmu_setup_all_event(void)
 {
     // drop PMU_INST_EVENT_XCPT/PMU_INST_EVENT_SYSTEM
-    PMU_SetEventMonitor(3, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_LOAD);
-    PMU_SetEventMonitor(4, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_STORE        );
-    PMU_SetEventMonitor(5, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_AMO              );
-    PMU_SetEventMonitor(6, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_ARITH        );
-    PMU_SetEventMonitor(7, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_BRANCH           );
-    PMU_SetEventMonitor(8, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_JAL              );
-    PMU_SetEventMonitor(9, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_JALR             );
-    PMU_SetEventMonitor(10, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_MUL          );
-    PMU_SetEventMonitor(11, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_DIV          );
-    PMU_SetEventMonitor(12, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_LOAD       );
-    PMU_SetEventMonitor(13, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_STORE      );
-    PMU_SetEventMonitor(14, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_ADD        );
-    PMU_SetEventMonitor(15, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_MUL        );
-    PMU_SetEventMonitor(16, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_MADD       );
-    PMU_SetEventMonitor(17, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_SQUARE     );
-    PMU_SetEventMonitor(18, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_OTHER_FLOAT      );
+    pmu_set_event_monitor(3, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_LOAD);
+    pmu_set_event_monitor(4, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_STORE        );
+    pmu_set_event_monitor(5, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_AMO              );
+    pmu_set_event_monitor(6, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_ARITH        );
+    pmu_set_event_monitor(7, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_BRANCH           );
+    pmu_set_event_monitor(8, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_JAL              );
+    pmu_set_event_monitor(9, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_JALR             );
+    pmu_set_event_monitor(10, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_MUL          );
+    pmu_set_event_monitor(11, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_INT_DIV          );
+    pmu_set_event_monitor(12, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_LOAD       );
+    pmu_set_event_monitor(13, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_STORE      );
+    pmu_set_event_monitor(14, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_ADD        );
+    pmu_set_event_monitor(15, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_MUL        );
+    pmu_set_event_monitor(16, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_MADD       );
+    pmu_set_event_monitor(17, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_FLOAT_SQUARE     );
+    pmu_set_event_monitor(18, PMU_INST_COMMIT_EVENT, PMU_INST_EVENT_OTHER_FLOAT      );
 
     // drop PMU_ARCH_EVENT_FLUSH_PIPE_CSR
-    PMU_SetEventMonitor(19, PMU_ARCH_EVENT, PMU_ARCH_EVENT_LOAD_USE);
-    PMU_SetEventMonitor(20, PMU_ARCH_EVENT, PMU_ARCH_EVENT_LONG_LATENCY     );
-    PMU_SetEventMonitor(21, PMU_ARCH_EVENT, PMU_ARCH_EVENT_CSR_LATENCY      );
-    PMU_SetEventMonitor(22, PMU_ARCH_EVENT, PMU_ARCH_EVENT_ICACHE_BUSY      );
-    PMU_SetEventMonitor(23, PMU_ARCH_EVENT, PMU_ARCH_EVENT_DCACHE_BUSY      );
-    PMU_SetEventMonitor(24, PMU_ARCH_EVENT, PMU_ARCH_EVENT_BR_MISPRED       );
-    PMU_SetEventMonitor(25, PMU_ARCH_EVENT, PMU_ARCH_EVENT_BRJM_MISPRED     );
-    PMU_SetEventMonitor(26, PMU_ARCH_EVENT, PMU_ARCH_EVENT_FLUSH_PIPE_OTHER );
-    PMU_SetEventMonitor(27, PMU_ARCH_EVENT, PMU_ARCH_EVENT_INT_MULT_ILOCK   );
-    PMU_SetEventMonitor(28, PMU_ARCH_EVENT, PMU_ARCH_EVENT_FP_ILOCK         );
+    pmu_set_event_monitor(19, PMU_ARCH_EVENT, PMU_ARCH_EVENT_LOAD_USE);
+    pmu_set_event_monitor(20, PMU_ARCH_EVENT, PMU_ARCH_EVENT_LONG_LATENCY     );
+    pmu_set_event_monitor(21, PMU_ARCH_EVENT, PMU_ARCH_EVENT_CSR_LATENCY      );
+    pmu_set_event_monitor(22, PMU_ARCH_EVENT, PMU_ARCH_EVENT_ICACHE_BUSY      );
+    pmu_set_event_monitor(23, PMU_ARCH_EVENT, PMU_ARCH_EVENT_DCACHE_BUSY      );
+    pmu_set_event_monitor(24, PMU_ARCH_EVENT, PMU_ARCH_EVENT_BR_MISPRED       );
+    pmu_set_event_monitor(25, PMU_ARCH_EVENT, PMU_ARCH_EVENT_BRJM_MISPRED     );
+    pmu_set_event_monitor(26, PMU_ARCH_EVENT, PMU_ARCH_EVENT_FLUSH_PIPE_OTHER );
+    pmu_set_event_monitor(27, PMU_ARCH_EVENT, PMU_ARCH_EVENT_INT_MULT_ILOCK   );
+    pmu_set_event_monitor(28, PMU_ARCH_EVENT, PMU_ARCH_EVENT_FP_ILOCK         );
 
     // drop PMU_MEM_EVENT_ITLB_MISS/PMU_MEM_EVENT_DTLB_MISS
-    PMU_SetEventMonitor(29, PMU_MEM_SYS_EVENT, PMU_MEM_EVENT_ICACHE_MISS);
-    PMU_SetEventMonitor(30, PMU_MEM_SYS_EVENT, PMU_MEM_EVENT_DCACHE_MISS       );
-    PMU_SetEventMonitor(31, PMU_MEM_SYS_EVENT, PMU_MEM_EVENT_DCACHE_WB         );
+    pmu_set_event_monitor(29, PMU_MEM_SYS_EVENT, PMU_MEM_EVENT_ICACHE_MISS);
+    pmu_set_event_monitor(30, PMU_MEM_SYS_EVENT, PMU_MEM_EVENT_DCACHE_MISS       );
+    pmu_set_event_monitor(31, PMU_MEM_SYS_EVENT, PMU_MEM_EVENT_DCACHE_WB         );
 }
 
-void PMU_GetAllCounter(int Priv, uint64_t * counterPtr)
+void pmu_get_all_counter(int Priv, uint64_t * counterPtr)
 {
     for(int i = 0; i < 32; i++)
-      *counterPtr++ = PMU_ReadCounter(Priv, i);
+      *counterPtr++ = pmu_read_counter(Priv, i);
 }
 
-void PMU_PrintReport(uint64_t * pre, uint64_t * now)
+void pmu_print_report(uint64_t * pre, uint64_t * now)
 {
     uint64_t counterVal[32];
     for(int i = 0; i < 32; i++)
@@ -649,9 +649,9 @@ void PMU_PrintReport(uint64_t * pre, uint64_t * now)
 }
 
 
-void PMU_StartRecord(void)
+void pmu_start_record(void)
 {
-    PMU_SetupAllEvent();
+    pmu_setup_all_event();
 
     asm volatile("csrr %0, mcycle"   : "=r"(val_pre[0]));
     asm volatile("csrr %0, time"     : "=r"(val_pre[1]));
@@ -691,7 +691,7 @@ void PMU_StartRecord(void)
     asm volatile("csrr %0, minstret" : "=r"(val_pre[2]));
  }
 
-void PMU_EndRecord(void)
+void pmu_end_record(void)
 {
     asm volatile( "csrw mhpmevent3, zero");
     asm volatile( "csrw mhpmevent4, zero");
@@ -755,7 +755,7 @@ void PMU_EndRecord(void)
     asm volatile("csrr %0, mhpmcounter29" : "=r"(val_new[29]));
     asm volatile("csrr %0, mhpmcounter30" : "=r"(val_new[30]));
     asm volatile("csrr %0, mhpmcounter31" : "=r"(val_new[31]));
-    PMU_PrintReport(val_pre, val_new);
+    pmu_print_report(val_pre, val_new);
 }
 
 

@@ -1,23 +1,27 @@
-//-----------UC TECH IP------------------
-//FileName:	PTE.h
-//Function:	define the page table of sv32,sv39 & sv48 and its interface 
-//Author: 	liaoll
-//Date :	2019-07-15
+/********************************************************************
+*
+*   PROJECT:    WH32
+*
+*   FILENAME:   PTE.H
+*
+*   FUNCTION:   define the page table of sv32, sv39 & sv48 and its interface 
+*
+*   AUTHOR:     liaoll
+*
+*   DATE:       2019-07-15
+*
+*   VERSION:    v0.1
+*
+*   IS_FINISH:  NO
+*********************************************************************/
 
+/* Define to prevent recursive inclusion --------------------------*/
 #ifndef WH_PROCESSOR_PTE
 #define WH_PROCESSOR_PTE
 
-//pte_sv32[i][0] is the first level of page table entry 
-extern int super_page_sv32 [1024];
-extern int leaf_page_sv32[1024][1024];
-
-void pageTableEnable_sv32();
-void pageTableDisable_sv32();
-
-
-void  pageTableInit_sv32();
-
-void * addrMap_sv32(int Level ,void *Paddr,unsigned int Exe,unsigned int Write,unsigned int Read,unsigned int User,unsigned int Global);
+/* Includes -------------------------------------------------------*/
+/* Exported constants ---------------------------------------------*/
+/* Exported macro -------------------------------------------------*/
 
 //Physical Address Format 
 //   33      22 21     12 11      0
@@ -100,7 +104,6 @@ void * addrMap_sv32(int Level ,void *Paddr,unsigned int Exe,unsigned int Write,u
 	(pte >> PTE_DIRTY_BIT) & PTE_DIRTY_MASK 
 
 
-
 #define PAGE_OFFSET_MASK 0xFFF
 
 
@@ -134,4 +137,16 @@ void * addrMap_sv32(int Level ,void *Paddr,unsigned int Exe,unsigned int Write,u
 #define INDEX_ADDR_VPN_BIT 2
 #define INDEX_ADDR_VPN_MASK 0x3FF 
 
-#endif 
+extern int super_page_sv32 [1024];
+extern int leaf_page_sv32[1024][1024];
+
+/* Exported functions ---------------------------------------------*/
+void sv32_init(void);
+void sv32_enable(void);
+void sv32_disable(void);
+void * sv32_addr_map(int Level ,void *Paddr,unsigned int Exe,unsigned int Write,unsigned int Read,unsigned int User,unsigned int Global);
+
+
+#endif /* WH_PROCESSOR_PTE */
+
+

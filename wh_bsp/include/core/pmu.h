@@ -12,11 +12,15 @@
  *
  ****************************************************/
 
+/* Define to prevent recursive inclusion --------------------------*/
 #ifndef SDJ2102_PMU_H
 #define SDJ2102_PMU_H
 
 #include "platform.h"
 
+/* Includes -------------------------------------------------------*/
+/* Exported constants ---------------------------------------------*/
+/* Exported macro -------------------------------------------------*/
 #define COUNTER_EN(MODE) (#MODE##counteren)
 //if MODE is S mode or U mode, MODE = ""
 #define HPM_EVENT(MODE,IDX) (#MODE##hpmevent###IDX)
@@ -81,19 +85,20 @@
 #define CSR_OP_SET 2
 #define CSR_OP_CLR 3
 
-void PMU_CounterEnable(int Priv, int Idx);
-void PMU_CounterDisable(int Priv, int Idx);
-void PMU_SetEventMonitor(int Idx, int EventClass, int Event);
-void PMU_ClearEventMonitor(int Idx);
-void PMU_ClearAllEventMonitor(void);
-uint64_t PMU_ReadCounter(int Priv, int Idx);
-int PMU_EnableAllCounter(int Priv);
-int PMU_DisableAllCounter(int Priv);
-void PMU_SetupAllEvent(void);
-void PMU_GetAllCounter(int Priv, uint64_t * counterPtr);
-void PMU_PrintReport(uint64_t * pre, uint64_t * now);
-void PMU_StartRecord(void);
-void PMU_EndRecord(void);
+/* Exported functions ---------------------------------------------*/
+void pmu_counter_enable(int Priv, int Idx);
+void pmu_Counter_disable(int Priv, int Idx);
+void pmu_set_event_monitor(int Idx, int EventClass, int Event);
+void pmu_clear_event_monitor(int Idx);
+void pmu_clear_all_event_monitor(void);
+uint64_t pmu_read_counter(int Priv, int Idx);
+int pmu_enable_all_counter(int Priv);
+int pmu_disable_all_counter(int Priv);
+void pmu_setup_all_event(void);
+void pmu_get_all_counter(int Priv, uint64_t * counterPtr);
+void pmu_print_report(uint64_t * pre, uint64_t * now);
+void pmu_start_record(void);
+void pmu_end_record(void);
 
-#endif
+#endif /* PMU_H */
 

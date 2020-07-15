@@ -1,17 +1,17 @@
 /************************************************************************************
- * *
- * *   PROJECT:    SDJ2102
- * *
- * *   FILE_NAME:  cacheSwitch.c  
- * *
- * *   FUNCTION:   DCache Enable/Disable Function 
- * *
- * *   AUTHOR:     liaoll
- * *
- * *   DATE:       2017/08/04
- * *
- * *   IS_FINISH:  NO
- * **********************************************************************************/
+*
+*   PROJECT:    SDJ2102
+*
+*   FILE_NAME:  cacheSwitch.c  
+*
+*   FUNCTION:   DCache Enable/Disable Function 
+*
+*   AUTHOR:     liaoll
+*
+*   DATE:       2017/08/04
+*
+*   IS_FINISH:  NO
+**********************************************************************************/
 
 /* Includes ------------------------------------------------------------------------*/
 #include "platform.h"

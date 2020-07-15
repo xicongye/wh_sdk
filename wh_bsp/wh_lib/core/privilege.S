@@ -5,7 +5,7 @@
 relocated_sp_s0:
 //store ra
   mv t2,ra
-//call addrMap_sv32
+//call sv32_addr_map
   li a0, 2
   li a2, 1
   li a3, 1
@@ -14,7 +14,9 @@ relocated_sp_s0:
   li a6, 1
 //Map sp
   mv a1,sp
-  call addrMap_sv32
+#if __riscv_xlen == 32
+  call sv32_addr_map
+#endif
   mv t0,a0
 //Map s0
   li a0, 2
@@ -24,7 +26,9 @@ relocated_sp_s0:
   li a5, 0
   li a6, 1
   mv a1,s0
-  call addrMap_sv32
+#if __riscv_xlen == 32
+  call sv32_addr_map
+#endif
   mv t1,a0
 //set 
   mv sp,t0

@@ -14,13 +14,18 @@
 *
 *   IS_FINISH:  NO
 *********************************************************************/
+
+/* Define to prevent recursive inclusion --------------------------*/
 #ifndef LS_PMP_H
 #define LS_PMP_H
 
-#define OFF 0
-#define TOR 1
-#define NA4 2
-#define NAPOT 3
+/* Includes -------------------------------------------------------*/
+/* Exported constants ---------------------------------------------*/
+/* Exported macro -------------------------------------------------*/
+#define PMP_OFF 0
+#define PMP_TOR 1
+#define PMP_NA4 2
+#define PMP_NAPOT 3
 
 #define PMP_CFG_LOCK_BIT 7
 #define PMP_CFG_LOCK_MASK 0x1
@@ -33,7 +38,9 @@
 #define PMP_CFG_READ_BIT 0
 #define PMP_CFG_READ_MASK 0x1
 
-void PMPConfig(int index,unsigned int addr,unsigned int align_mask,unsigned int lock,unsigned int mode,unsigned int r,unsigned int x,unsigned int w);
+/* Exported functions ---------------------------------------------*/
+void pmp_config(uint32_t index, uintptr_t addr, uintptr_t align_mask, uint32_t lock, uint32_t mode, uint32_t r, uint32_t x, uint32_t w);
+
+#endif /*LS_PMP_H*/
 
 
-#endif

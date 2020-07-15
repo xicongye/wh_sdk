@@ -17,8 +17,13 @@ _start:
 .option pop
 	la sp, _sp
 
-  la  tp, _end + 63                                                                                                                                      
+  la  tp, _end + 63
   and tp, tp, -64
+
+#ifdef ON_SPIKE
+#else
+        csrw 0x7c1, 0x0
+#endif
 
 #if defined(ENABLE_SMP)
 	smp_pause(t0, t1)
@@ -27,8 +32,12 @@ _start:
 #if defined(ENABLE_DCACHE)
         li a0, MSTATUS_DD
 	csrrc x0, mstatus, a0
+#else
+        li a0, MSTATUS_DD
+	csrs mstatus, a0
 #endif
 
+#ifdef ON_BOARD
 	/* Load data section */
 	la a0, _data_lma
 	la a1, _data
@@ -63,6 +72,7 @@ _start:
 	sd zero, (a0)
 	addi a0, a0, 8
 	bltu a0, a1, 1b
+#endif
 #endif
 2:
 
