@@ -400,6 +400,8 @@ C--------------------------------------------------------------------
 		printf("C Converted Double Precision Whetstones: %.1f MIPS\n", KIPS/1000.0);
 	else
 		printf("C Converted Double Precision Whetstones: %.1f KIPS\n", KIPS);
+
+        printf("Scode: %f\n", loopstart/((float)(finisec-startsec))/(get_cpu_frequency()/1000000));
 #endif
 
 	if (continuous)
