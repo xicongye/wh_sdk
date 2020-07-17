@@ -63,10 +63,10 @@ RISCV_AS      := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-as)
 SPIKE         := $(abspath $(RISCV_PATH)/bin/spike)
 endif
 
-ifeq ($(RISCV_OPENOCD),)
+ifeq ($(RISCV_OPENOCD_PATH),)
 RISCV_OPENOCD := openocd
 else
-RISCV_OPENOCD := $(abspath $(RISCV_OPENOCD)/bin/openocd)
+RISCV_OPENOCD := $(abspath $(RISCV_OPENOCD_PATH)/bin/openocd)
 endif
 #################################################################################################
 #		This section is for Software Compilation
