@@ -49,6 +49,8 @@ RISCV_OBJCOPY := $(CROSS_COMPILE)-objcopy
 RISCV_GDB     := $(CROSS_COMPILE)-gdb
 RISCV_AR      := $(CROSS_COMPILE)-ar
 RISCV_SIZE    := $(CROSS_COMPILE)-size
+RISCV_READELF := $(CROSS_COMPILE)-readelf
+RISCV_AS      := $(CROSS_COMPILE)-as
 SPIKE         := spike
 else
 RISCV_GCC     := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-gcc)
@@ -213,6 +215,8 @@ dist-clean:
 	rm -rf wh_bsp/env/LS_Board/WH64_DDR/*.lds
 	rm -rf wh_bsp/env/LS_Board/WH_SETTING/*.S 
 	rm -rf wh_bsp/env/LS_Board/WH_SETTING/*.lds
+	rm -rf wh_bsp/env/LS_Board/WH32_IMC_XTX_2020_02_27/*.S
+	rm -rf wh_bsp/env/LS_Board/WH32_IMC_XTX_2020_02_27/*.lds
 
 scp:
 	scp -r $(OUTPUT_DIR)/$(TARGET)   $(USER)@192.168.168.197:~/project/WH/workspace/software 
