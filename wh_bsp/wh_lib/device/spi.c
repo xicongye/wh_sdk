@@ -77,11 +77,10 @@ void spi_data_ctr(unsigned char pin7)
     pin7=0x80 (send_data)
     pin7=0x00 (send_order)
     ##########################################*/
-    GPIO_REG(GPIO_CTRL_ADDRA) |= 0x4;
-    GPIO_REG(GPIO_DATA_ADDRA) = ( (GPIO_REG(GPIO_DATA_ADDRA)&0x00)|pin7 );
-    // For JBoss
-    //gpio_output_enable(GPIOC);
-    //gpio_write_byte(GPIOC, pin7);
+    //GPIO_REG(GPIO_CTRL_ADDRA) |= 0x4;
+    //GPIO_REG(GPIO_DATA_ADDRA) = ( (GPIO_REG(GPIO_DATA_ADDRA)&0x00)|pin7 );
+    GPIO_CTRL_REG(GPIO_CTRL_ADDRA) |= (1 << 23);
+    gpio_write_byte(GPIOC, pin7);
 }
 
 
