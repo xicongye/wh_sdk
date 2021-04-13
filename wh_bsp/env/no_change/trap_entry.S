@@ -48,7 +48,7 @@ trap_entry:
   csrr a1, mepc
   mv a2, sp
   call handle_trap
-  csrw mepc, a1
+  csrw mepc, a0
   STORE x7, 7*REGBYTES(sp)
 
 
