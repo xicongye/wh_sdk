@@ -12,4 +12,6 @@ MMIO_BASE  := 0x10000000
 INT_NUM    := 16
 DCACHE_EN  := 1
 CORE_NUM   := 1
-ECII_EN    := 0
+CEII_EN    := 0
+VARCH      := vlen:128,elen:64,slen:128
+RTC_FRQ    := 1562500

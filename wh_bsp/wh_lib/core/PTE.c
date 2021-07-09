@@ -57,6 +57,7 @@ void sv32_init(void)
 ********************************************************************/
 void sv32_enable(void) 
 {
+#if __riscv_xlen == 32
   int satp_ppn,satp_mode;
   int satp ;
 
@@ -66,6 +67,7 @@ void sv32_enable(void)
   satp_mode = 1;
   satp = (satp_mode << SATP_MODE_BIT) | satp_ppn;
   write_csr(satp,satp);
+#endif
 }
 
 
@@ -98,6 +100,7 @@ void sv32_disable(void)
 ********************************************************************/
 void * sv32_addr_map(int Level, void *Paddr, unsigned int Exe, unsigned int Write, unsigned int Read, unsigned int User, unsigned int Global)
 {
+#if __riscv_xlen == 32
   unsigned int idx_x , idx_y;
   unsigned int pte_priv;
   unsigned int super_priv; 
@@ -209,7 +212,7 @@ void * sv32_addr_map(int Level, void *Paddr, unsigned int Exe, unsigned int Writ
       }
     }
   }
-
+#endif
   return NULL ; // Error 
 }
 

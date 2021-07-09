@@ -18,7 +18,7 @@ Original Author: Shay Gal-on
 #include <sys/time.h>
 #include "coremark.h"
 #include "core_portme.h"
-#include "platform.h"
+#include "csr.h"
 
 #if VALIDATION_RUN
 	volatile ee_s32 seed1_volatile=0x3415;

@@ -12,4 +12,4 @@ MMIO_BASE  := 0x10000000
 INT_NUM    := 16
 DCACHE_EN  := 0
 CORE_NUM   := 1
-ECII_EN    := 0
+CEII_EN    := 0

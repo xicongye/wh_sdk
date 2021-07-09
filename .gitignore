@@ -1,6 +1,9 @@
 *.o
 *.elf
 *.a
+*.asm
+*.map
+*.script
 output/
 dump-token
 *.log

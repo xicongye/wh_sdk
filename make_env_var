@@ -1,17 +1,22 @@
 #### user change ####
 BOARD ?= LS_Board
-RELEASE ?= WH32_IMC_XTX_2020_02_27
+RELEASE ?= spike64
+SOFTWARE ?= software
 PROGRAM ?= coremark
-HOST_IP := localhost
+HOST_IP := 192.168.168.110
 
 #### no change ####
 LINK_TARGET ?= link
+SDK_ROOT := $(abspath .)
 BSP_BASE := $(abspath wh_bsp)
 BOARD_DIR := $(abspath $(BSP_BASE)/env/$(BOARD))
 RELEASE_DIR := $(BOARD_DIR)/$(RELEASE)
-PROGRAM_DIR = $(abspath software/$(PROGRAM))
+PROGRAM_DIR = $(abspath $(SOFTWARE)/$(PROGRAM))
 OUTPUT_DIR = $(abspath output)
 SCRIPT_DIR = $(abspath script)
 WH_LIB = $(abspath wh_bsp/wh_lib)
 INCLUDE_DIR = $(abspath wh_bsp/include)
-
+SOFTWARE_DIR = $(abspath $(SOFTWARE))
+RELEASE_STARTUP_DIR = $(abspath $(RELEASE_DIR)/startup)
+BOARD_STARTUP_DIR := $(BOARD_DIR)/LS_Startup
+BUILD_DIR := $(RELEASE_DIR)/build

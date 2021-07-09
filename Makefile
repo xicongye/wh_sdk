@@ -52,6 +52,7 @@ RISCV_SIZE    := $(CROSS_COMPILE)-size
 RISCV_READELF := $(CROSS_COMPILE)-readelf
 RISCV_AS      := $(CROSS_COMPILE)-as
 SPIKE         := spike
+RISCV_ELF2HEX := riscv64-unknown-elf-elf2hex
 else
 RISCV_GCC     := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-gcc)
 RISCV_GXX     := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-g++)
@@ -63,6 +64,7 @@ RISCV_SIZE    := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-size)
 RISCV_READELF := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-readelf)
 RISCV_AS      := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-as)
 SPIKE         := $(abspath $(RISCV_PATH)/bin/spike)
+RISCV_ELF2HEX := $(abspath $(RISCV_PATH)/bin/riscv64-unknown-elf-elf2hex)
 endif
 
 ifeq ($(RISCV_OPENOCD_PATH),)
@@ -83,42 +85,50 @@ OBJDUMP = $(RISCV_OBJDUMP)
 OBJCOPY = $(RISCV_OBJCOPY)
 AS = $(RISCV_AS)
 SIZE = $(RISCV_SIZE)
+ELF2HEX = $(RISCV_ELF2HEX)
 
 #################################################################################################
 #		This section is for uploading a program to Flash
 #################################################################################################
+ifeq ($(PLATFORM), BOARD)
 OPENOCDCFG_NAME ?= openocd.cfg
-OPENOCDCFG ?= $(abspath wh_bsp/env/$(BOARD)/$(OPENOCDCFG_NAME))  
+else ifeq ($(PLATFORM), SPIKE)
+OPENOCDCFG_NAME ?= spike.cfg
+HOST_IP := localhost
+else ifeq ($(PLATFORM), VCS)
+OPENOCDCFG_NAME ?= openocd.cfg
+endif
+OPENOCDCFG ?= $(BOARD_STARTUP_DIR)/$(OPENOCDCFG_NAME)
 OPENOCDARGS += -f $(OPENOCDCFG) 
 
 GDB_UPLOAD_ARGS ?= --batch
 GDB_PORT ?= 3333
-GDB_UPLOAD_CMDS += -ex "set remotetimeout 240"
-GDB_UPLOAD_CMDS += -ex "target extended-remote $(HOST_IP):$(GDB_PORT)"
-GDB_UPLOAD_CMDS += -ex "monitor reset halt"
-#GDB_UPLOAD_CMDS += -ex "monitor flash protect 0 64 last off"
-GDB_UPLOAD_CMDS += -ex "load"
-GDB_UPLOAD_CMDS += -ex "monitor resume"
-#GDB_UPLOAD_CMDS += -ex "monitor shutdown"
-GDB_UPLOAD_CMDS += -ex "quit"
+GDB_UPLOAD_CMDS += -ex 'set remotetimeout 240'
+GDB_UPLOAD_CMDS += -ex 'target extended-remote $(HOST_IP):$(GDB_PORT)'
+GDB_UPLOAD_CMDS += -ex 'monitor reset halt'
+#GDB_UPLOAD_CMDS += -ex 'monitor flash protect 0 64 last off'
+GDB_UPLOAD_CMDS += -ex 'load'
+GDB_UPLOAD_CMDS += -ex 'monitor resume'
+#GDB_UPLOAD_CMDS += -ex 'monitor shutdown'
+GDB_UPLOAD_CMDS += -ex 'quit'
 
-GDBCMDS += -ex "set remotetimeout 240"
-GDBCMDS += -ex "target extended-remote localhost:$(GDB_PORT)"
+GDBCMDS += -ex 'set remotetimeout 240'
+GDBCMDS += -ex 'target extended-remote localhost:$(GDB_PORT)'
 
 upload:
-	$(RISCV_GDB) software/$(PROGRAM)/$(TARGET).elf $(GDB_UPLOAD_ARGS) $(GDB_UPLOAD_CMDS)
+	$(RISCV_GDB) $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf $(GDB_UPLOAD_ARGS) $(GDB_UPLOAD_CMDS)
 	
 run_sim:
-	$(SPIKE) --isa=$(RISCV_ARCH) -m0x40000000:0x5000000  software/$(PROGRAM)/$(TARGET).elf
+	$(SPIKE) --isa=$(RISCV_ARCH) --varch=$(VARCH) -m0x40000000:0x50000000  $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
 
 run_spike:
-	$(SPIKE) --isa=$(RISCV_ARCH) --rbb-port=9824 -m0x40000000:0x5000000  software/$(PROGRAM)/$(TARGET).elf
+	$(SPIKE) --isa=$(RISCV_ARCH) --varch=$(VARCH) --rbb-port=9824 -m0x40000000:0x50000000  $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
 
 run_openocd:
 	$(RISCV_OPENOCD) $(OPENOCDARGS)
 
 run_gdb:
-	$(RISCV_GDB) software/$(PROGRAM)/$(TARGET).elf -ex "target extended-remote $(HOST_IP):$(GDB_PORT)" -ex "load"
+	$(RISCV_GDB) $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf -ex "target extended-remote $(HOST_IP):$(GDB_PORT)" -ex "load"
 	
 #################################################################################################
 #		Create Release & Create Project & SCP
@@ -127,29 +137,6 @@ run_gdb:
 PRO_DIR = $(shell if [ -d $(PROGRAM_DIR) ]; then echo "exist"; else echo "no exist"; fi)
 REL_DIR = $(shell if [ -d $(RELEASE_DIR) ]; then echo "exist"; else echo "no exist"; fi)
 DATE = $(shell date)
-
-create_release:
-ifeq ($(REL_DIR), exist)
-	$(error $(RELEASE_DIR) has existed, please remove it first)
-else
-	mkdir $(RELEASE_DIR)
-	cp $(BSP_BASE)/env/no_change/setting.mk $(abspath $(RELEASE_DIR)) 
-	cp $(BSP_BASE)/env/no_change/dcache.lds $(abspath $(RELEASE_DIR)) 
-	cp $(BSP_BASE)/env/no_change/flash.lds $(abspath $(RELEASE_DIR)) 
-	cp $(BSP_BASE)/env/no_change/dhrystone.lds $(abspath $(RELEASE_DIR)) 
-	cp $(BSP_BASE)/env/no_change/start.S $(abspath $(RELEASE_DIR)) 
-	cp $(BSP_BASE)/env/no_change/trap_entry.S $(abspath $(RELEASE_DIR)) 
-	sed -i 's/MEM_BASE/$(MEM_BASE)/g'  $(abspath $(RELEASE_DIR))/flash.lds
-	sed -i 's/MEM_SIZE/$(MEM_SIZE)/g'  $(abspath $(RELEASE_DIR))/flash.lds
-	sed -i 's/MEM_BASE/$(MEM_BASE)/g'  $(abspath $(RELEASE_DIR))/dhrystone.lds	
-	sed -i 's/MEM_SIZE/$(MEM_SIZE)/g'  $(abspath $(RELEASE_DIR))/dhrystone.lds
-	sed -i 's/MEM_BASE/$(MEM_BASE)/g'  $(abspath $(RELEASE_DIR))/dcache.lds
-	sed -i 's/MEM_SIZE/$(MEM_SIZE)/g'  $(abspath $(RELEASE_DIR))/dcache.lds
-	sed -i 's/DTIM_BASE/$(DTIM_BASE)/g'  $(abspath $(RELEASE_DIR))/flash.lds
-	sed -i 's/DTIM_SIZE/$(DTIM_SIZE)/g'  $(abspath $(RELEASE_DIR))/flash.lds
-	sed -i 's/DTIM_BASE/$(DTIM_BASE)/g'  $(abspath $(RELEASE_DIR))/dhrystone.lds	
-	sed -i 's/DTIM_SIZE/$(DTIM_SIZE)/g'  $(abspath $(RELEASE_DIR))/dhrystone.lds
-endif
 
 create_project:
 ifeq ($(PRO_DIR), exist)
@@ -203,20 +190,21 @@ dist-clean:
 	find . -name *.o -delete
 	find . -name *.a -delete
 	find . -name *.map -delete
+	find . -name *.asm -delete
+	find . -name *.script -delete
 	rm -rf output
-	rm -rf wh_bsp/include/mmu.h
-	rm -rf wh_bsp/env/LS_Board/WH32_DDR/*.S 
-	rm -rf wh_bsp/env/LS_Board/WH32_DDR/*.lds
-	rm -rf wh_bsp/env/LS_Board/spike/*.S
-	rm -rf wh_bsp/env/LS_Board/spike/*.lds
-	rm -rf wh_bsp/env/LS_Board/Start-WH/*.S
-	rm -rf wh_bsp/env/LS_Board/Start-WH/*.lds
-	rm -rf wh_bsp/env/LS_Board/WH64_DDR/*.S 
-	rm -rf wh_bsp/env/LS_Board/WH64_DDR/*.lds
-	rm -rf wh_bsp/env/LS_Board/WH_SETTING/*.S 
-	rm -rf wh_bsp/env/LS_Board/WH_SETTING/*.lds
-	rm -rf wh_bsp/env/LS_Board/WH32_IMC_XTX_2020_02_27/*.S
-	rm -rf wh_bsp/env/LS_Board/WH32_IMC_XTX_2020_02_27/*.lds
+	rm -rf wh_bsp/env/LS_Board/WH32_DDR/build*
+	rm -rf wh_bsp/env/LS_Board/WH32_DDR/startup
+	rm -rf wh_bsp/env/LS_Board/spike/build*
+	rm -rf wh_bsp/env/LS_Board/spike/startup
+	rm -rf wh_bsp/env/LS_Board/spike64/build*
+	rm -rf wh_bsp/env/LS_Board/spike64/startup
+	rm -rf wh_bsp/env/LS_Board/WH64_DDR/build*
+	rm -rf wh_bsp/env/LS_Board/WH64_DDR/startup
+	rm -rf wh_bsp/env/LS_Board/WH_B_EXT/build*
+	rm -rf wh_bsp/env/LS_Board/WH_B_EXT/startup
+	rm -rf wh_bsp/env/LS_Board/WH_SETTING/build*
+	rm -rf wh_bsp/env/LS_Board/WH_SETTING/startup
 
 scp:
 	scp -r $(OUTPUT_DIR)/$(TARGET)   $(USER)@192.168.168.197:~/project/WH/workspace/software 
@@ -231,5 +219,5 @@ PROGRAM_MK = $(shell if [ -f $(PROGRAM_DIR)/Makefile ]; then echo "exist"; else 
 
 -include $(PROGRAM_DIR)/Makefile
 include $(BOARD_DIR)/Makefile 
-
+include $(SCRIPT_DIR)/self-test.mk
 

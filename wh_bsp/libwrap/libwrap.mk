@@ -15,52 +15,33 @@
 LIBWRAP_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 LIBWRAP_DIR := $(LIBWRAP_DIR:/=)
 
-LIBWRAP_SRCS := \
-	sys/open.c \
-	sys/lseek.c \
-	sys/read.c \
-	sys/write.c \
-	sys/fstat.c \
-	sys/stat.c \
-	sys/close.c \
-	sys/link.c \
-	sys/unlink.c \
-	sys/execve.c \
-	sys/fork.c \
-	sys/getpid.c \
-	sys/kill.c \
-	sys/wait.c \
-	sys/isatty.c \
-	sys/times.c \
-	sys/sbrk.c \
-	sys/_exit.c \
-	sys/puts.c \
-	misc/write_hex.c \
-	sys/gettimeofday.c \
-	sys/printf.c
+LIBWRAP_SOURCE_DIR := $(LIBWRAP_DIR)
+LIBWRAP_BUILD_DIR := $(RELEASE_DIR)/build/libwarp
 
-LIBWRAP_SRCS := $(foreach f,$(LIBWRAP_SRCS),$(LIBWRAP_DIR)/$(f))
-LIBWRAP_OBJS := $(LIBWRAP_SRCS:.c=.o)
+LIBWRAP_MISC_SRCS := $(wildcard $(LIBWRAP_SOURCE_DIR)/misc/*.c)
+LIBWRAP_STDLIB_SRCS := $(wildcard $(LIBWRAP_SOURCE_DIR)/stdlib/*.c)
+LIBWRAP_SYS_SRCS := $(wildcard $(LIBWRAP_SOURCE_DIR)/sys/*.c)
+LIBWRAP_SRCS := $(LIBWRAP_MISC_SRCS) $(LIBWRAP_STDLIB_SRCS) $(LIBWRAP_SYS_SRCS)
+LIBWRAP_SRCS_OBJS := $(patsubst $(LIBWRAP_SOURCE_DIR)/%.c,$(LIBWRAP_BUILD_DIR)/%.o,$(LIBWRAP_SRCS))
 
 LIBWRAP_SYMS :=  free \
 	_open _lseek _read _write _fstat _stat _close _link _unlink \
 	_execve _fork _getpid _kill _wait \
 	_isatty _times _sbrk _exit puts _gettimeofday
 
-LIBWRAP := $(LIBWRAP_DIR)/libwrap.a
+LIBWRAP := $(RELEASE_DIR)/libwrap.a
 
 LINK_DEPS += $(LIBWRAP)
 
 LDFLAGS += $(foreach s,$(LIBWRAP_SYMS),-Wl,--wrap=$(s))
 
-# TO DO
 LDFLAGS += -L$(LIBWRAP_DIR) -Wl,--start-group -lwrap -lc -Wl,--end-group
 
-CLEAN_OBJS += $(LIBWRAP_OBJS)
+CLEAN_OBJS += $(LIBWRAP_SRCS_OBJS)
 
-$(LIBWRAP_OBJS): %.o: %.c $(HEADERS)
+$(LIBWRAP_SRCS_OBJS): $(LIBWRAP_BUILD_DIR)/%.o: $(LIBWRAP_SOURCE_DIR)/%.c $(HEADERS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
-$(LIBWRAP): $(LIBWRAP_OBJS)
+$(LIBWRAP): $(LIBWRAP_SRCS_OBJS)
 	$(AR) rcs $@ $^
 

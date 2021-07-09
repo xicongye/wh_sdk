@@ -23,7 +23,7 @@ int num = 0;
 int main(void)
 {
     printf("M-Mode timer interrupt test Start.\r\n");
-    int_init();
+    //int_init();
     timer_int_init();
     timer_int_enable();
     timer_int_bind_handler(RTC_IRQ_Handler);

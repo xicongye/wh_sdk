@@ -159,22 +159,6 @@ SECTIONS
   } >ram AT>ram :ram
 
   . = ALIGN(8);
-
-  /* thread-local data segment */
-  .tdata :
-  {                                                                
-    _tls_data = .;
-    *(.tdata.begin)                                                
-    *(.tdata)
-    *(.tdata.end)
-  } >flash AT>flash :ram   
-
-  .tbss :                                                          
-  {
-    *(.tbss)
-    *(.tbss.end)                                                   
-  } >flash AT>flash :ram
-
   PROVIDE( _end = . );
   PROVIDE( end = . );
 

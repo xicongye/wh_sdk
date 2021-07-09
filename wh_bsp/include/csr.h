@@ -35,7 +35,7 @@
 #define MSTATUS_TVM	(1U<<20)
 #define MSTATUS_TW	(1U<<21)
 #define MSTATUS_TSR	(1U<<22)
-#define MSTATUS_VS      (3U<<23) //VPU Enable Filed
+#define MSTATUS_VS      (3U<<9) //VPU Enable Filed
 #define MSTATUS_DD      (1U<<25) //DCache Disable Bit 
 #define MSTATUS_VM	(32768U<<24)
 #define MSTATUS_SD	(1U<<31)

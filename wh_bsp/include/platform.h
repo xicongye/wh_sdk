@@ -27,6 +27,9 @@
 #define _ATTACH(T,X)    ((T)(X))
 #endif /*!__ASSEMBLER__*/
 
+#define PASS 0
+#define FAIL 1
+
 /************************************************
 *   memory map
 **************************************************/
@@ -60,7 +63,7 @@
 #define CLINT_REG(offset)       _REG32(CLINT_CTRL_ADDR,offset)
 #define PLIC_REG(offset)        _REG32(PLIC_CTRL_ADDR,offset)
 #define GPIO_REG(offset)        _REG8(GPIO_CTRL_ADDR,offset)
-#define GPIO_CTRL_REG(offset)	_REG32(GPIO_CTRL_ADDR,offset)
+#define GPIO_CTRL_REG(offset)   _REG32(GPIO_CTRL_ADDR,offset)
 #define I2C_REG(offset)         _REG8(I2C_CTRL_ADDR,offset)
 #define UART_REG(offset)        _REG8(UART_CTRL_ADDR,offset)
 #define UART2_REG(offset)       _REG8(UART2_CTRL_ADDR,offset)

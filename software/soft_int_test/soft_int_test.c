@@ -29,7 +29,7 @@ int main(void)
 
     clear_csr(mip, MIP_MTIP);
     printf("M-Mode software interrupt test Start.\r\n");
-    int_init();
+    //int_init();
     soft_int_enable();
     soft_int_bind_handler(SOFT_IRQ_Handler);
     write_csr(mideleg, 0x00);

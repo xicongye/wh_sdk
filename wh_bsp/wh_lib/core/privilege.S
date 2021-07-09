@@ -1,4 +1,5 @@
 #include "csr.h"
+#ifndef __riscv_32e
 .section .text
 .global relocated_sp_s0
 .type relocated_sp_s0 , @function
@@ -85,3 +86,4 @@ mem_privilege_drop_to_mode:
    csrw mstatus, a4   # mstatus = a4
    ret
 
+#endif

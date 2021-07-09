@@ -17,19 +17,19 @@
 #include "platform.h"
 #include <stdio.h>
 
-unsigned int * mem_ptr = (unsigned int *)(0x42000000);
+unsigned int * mem_ptr = (unsigned int *)(0x41000000);
 
 int main(void)
 {
     printf("PMP TEST\r\n");
 
-    pmp_config(0,   0x42000000, 0,   0,     0,    0,  0,  0); 
-    //       index    |         |    |      |     |   |   |
-    //               addr       |    |      |     |   |   |
-    //                         mask  |      |     |   |   |
-    //                              lock   mode   r   x   w
+    pmp_config(0,   0x41000000, 0,   0,      0,    0,  0,  0); 
+    //       index    |        |    |        |     |   |   |
+    //               addr      |    |        |     |   |   |
+    //                        mask  |        |     |   |   |
+    //                             lock     mode   r   x   w
 
-    pmp_config(1,   0x43000000, 0,   1, PMP_TOR,   1,  1,  0);
+    pmp_config(1,   0x42000000, 0,   1, PMP_TOR,   1,  1,  0);
     //       index    |        |    |        |     |   |   |
     //               addr      |    |        |     |   |   |
     //                        mask  |        |     |   |   |

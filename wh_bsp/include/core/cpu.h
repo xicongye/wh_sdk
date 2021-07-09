@@ -27,6 +27,7 @@
 /* Exported functions ------------------------------------------------------- */
 unsigned long long get_cyclecount(void);
 unsigned long long get_cpu_frequency(void);
+unsigned long long get_rtc_frequency(void);
 
 #endif /* SDJ2102_CPU_H */
 

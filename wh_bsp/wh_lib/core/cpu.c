@@ -37,6 +37,19 @@ unsigned long long get_cpu_frequency(void)
 
 
 /********************************************************************
+* Function Name :   get_rtc_frequency
+* Description   :   get rtc current frequency
+* Input         :   none
+* Output        :   none
+* Return        :   current frequency
+********************************************************************/
+unsigned long long get_rtc_frequency(void)
+{
+    return (unsigned long long)(MTIME_FREQ);
+}
+
+
+/********************************************************************
 * Function Name :   get_cyclecount
 * Description   :   get mcycle counter value
 * Input         :   none
@@ -45,6 +58,8 @@ unsigned long long get_cpu_frequency(void)
 ********************************************************************/
 unsigned long long get_cyclecount(void)
 {
+    return MTIME;
+#if 0
     unsigned long long val = 0;
 #if __riscv_xlen == 32
     unsigned long hi, hi1, lo; 
@@ -59,5 +74,23 @@ unsigned long long get_cyclecount(void)
     asm volatile ("csrr %0, mcycle" : "=r"(val));
 #endif
     return val;
+#endif
 }
+
+/********************************************************************
+* Function Name :   testcase_status
+* Description   :   
+* Input         :   none
+* Output        :   none
+* Return        :   none
+********************************************************************/
+void testcase_status(uint32_t id, uint32_t status)
+{
+    *(uint32_t*)(0x40000000) = id;
+    *(uint32_t*)(0x40000004) = status;
+
+    if(status == FAIL)  
+      while(1);
+}
+
 

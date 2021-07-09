@@ -111,7 +111,7 @@ void uart_putchar(char ch)
     UART_REG(UART_ECR) = (UART_REG(UART_ECR) & 0x0F) | 0x50;//set UART_ECR with 3
     //UART_REG(UART_ECR) = 0x30 | br_h;//equal the last line code,but the curcuit have a little bug when read the device, so use this line code 
     while(!(UART_REG(UART_IS) & UART_IS_ECNT0)); //the etu didn't arrive default value(3)
-    UART_REG(UART_IS) &= ~UART_IS_ECNT0;
+    UART_REG(UART_IS) &= ~((uint8_t)UART_IS_ECNT0);
 }
 
 

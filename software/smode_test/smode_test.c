@@ -23,8 +23,8 @@ void handle_sint_time(void);
 void handle_sint_ext(void);
 unsigned int smode_handle_trap(uintptr_t  scause, uintptr_t epc);
 
-#define SMODE_SOFT_INT
-//#define SMODE_TIME_INT
+//#define SMODE_SOFT_INT
+#define SMODE_TIME_INT
 
 
 int main(void)

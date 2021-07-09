@@ -18,6 +18,7 @@
 #define CORE_FREQ               CLK_FRQ  
 #define MMIO_ADDR               MMIO_BASE
 #define PLIC_NUM                INT_NUM
+#define MTIME_FREQ              RTC_FRQ
 
 #define CLINT_CTRL_BASE         (CLINT_BASE)
 #define PLIC_CTRL_BASE          (PLIC_BASE) 
@@ -44,7 +45,7 @@
     #define ENABLE_SMP
 #endif
 
-#define ROCC_STATUS             ECII_EN
+#define ROCC_STATUS             CEII_EN
 #if ROCC_STATUS==1
     #define ENABLE_ROCC
 #endif

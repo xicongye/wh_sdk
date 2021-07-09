@@ -15,24 +15,14 @@
 WH_CORE_LIB_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 WH_CORE_LIB_DIR := $(WH_CORE_LIB_DIR:/=)
 
-WH_CORE_SRCS := \
-	cgu.c \
-	clint.c \
-	int.c \
-	plic.c \
-	pmp.c \
-        PTE.c \
-	cacheSwitch.c \
-	cpu.c \
-	pmu.c
+CORE_SOURCE_DIR := $(WH_CORE_LIB_DIR)
+CORE_BUILD_DIR := $(RELEASE_DIR)/build/core
 
-WH_CORE_ASMS := privilege.S
+WH_CORE_ASMS := $(wildcard $(CORE_SOURCE_DIR)/*.S)
+WH_CORE_ASMS_OBJS := $(patsubst $(CORE_SOURCE_DIR)/%.S,$(CORE_BUILD_DIR)/%.o,$(WH_CORE_ASMS))
 
-WH_CORE_ASMS := $(foreach f,$(WH_CORE_ASMS),$(WH_CORE_LIB_DIR)/$(f))
-WH_CORE_ASMS_OBJS := $(WH_CORE_ASMS:.S=.o)
-
-WH_CORE_SRCS := $(foreach f,$(WH_CORE_SRCS),$(WH_CORE_LIB_DIR)/$(f))
-WH_CORE_SRCS_OBJS := $(WH_CORE_SRCS:.c=.o)
+WH_CORE_SRCS := $(wildcard $(CORE_SOURCE_DIR)/*.c)
+WH_CORE_SRCS_OBJS := $(patsubst $(CORE_SOURCE_DIR)/%.c,$(CORE_BUILD_DIR)/%.o,$(WH_CORE_SRCS))
 
 WH_CORE_OBJS := $(WH_CORE_ASMS_OBJS) $(WH_CORE_SRCS_OBJS)
 
@@ -44,12 +34,13 @@ LINK_DEPS += $(WH_CORE_LIBWRAP)
 
 CLEAN_OBJS += $(WH_CORE_OBJS)
 
-$(WH_CORE_SRCS_OBJS): %.o: %.c $(HEADERS)
+$(WH_CORE_SRCS_OBJS): $(CORE_BUILD_DIR)/%.o: $(CORE_SOURCE_DIR)/%.c $(HEADERS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
-$(WH_CORE_ASMS_OBJS): %.o: %.S $(HEADERS)
+$(WH_CORE_ASMS_OBJS): $(CORE_BUILD_DIR)/%.o: $(CORE_SOURCE_DIR)/%.S $(HEADERS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 $(WH_CORE_LIBWRAP): $(WH_CORE_OBJS)
 	$(AR) rcs $@ $^
+
 

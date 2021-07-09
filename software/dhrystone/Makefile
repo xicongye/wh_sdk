@@ -5,7 +5,7 @@ C_SRCS :=
 DHRY_SRCS := dhry_1.c dhry_2.c
 DHRY_SRCS := $(patsubst %.c,$(PROGRAM_DIR)/%.c,$(DHRY_SRCS))
 #DHRY_CFLAGS := -O3 -DTIME -fno-inline -fno-builtin-printf -Wno-implicit
-DHRY_CFLAGS := -O3 -DTIME -Wno-implicit #-flto
+DHRY_CFLAGS := -O3 -DTIME -Wno-implicit -w #-flto
 
 CFLAGS := -DITERATIONS=5000000
 LDFLAGS := #-Wl,--wrap=printf
