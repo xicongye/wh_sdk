@@ -8,6 +8,7 @@ output/
 dump-token
 *.log
 wh_bsp/include/mmu.h
+*.bin
 
 wh_bsp/env/LS_Board/Start-WH/dcache.lds
 wh_bsp/env/LS_Board/Start-WH/dhrystone.lds

@@ -192,6 +192,7 @@ dist-clean:
 	find . -name *.map -delete
 	find . -name *.asm -delete
 	find . -name *.script -delete
+	find . -name *.bin -delete
 	rm -rf output
 	rm -rf wh_bsp/env/LS_Board/WH32_DDR/build*
 	rm -rf wh_bsp/env/LS_Board/WH32_DDR/startup
@@ -219,5 +220,5 @@ PROGRAM_MK = $(shell if [ -f $(PROGRAM_DIR)/Makefile ]; then echo "exist"; else 
 
 -include $(PROGRAM_DIR)/Makefile
 include $(BOARD_DIR)/Makefile 
-include $(SCRIPT_DIR)/self-test.mk
+-include $(SCRIPT_DIR)/self-test.mk
 

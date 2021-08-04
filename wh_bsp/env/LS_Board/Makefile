@@ -70,7 +70,9 @@ software: \
           clean \
           $(RELEASE_STARTUP_DIR)/build-setting-stamp \
           $(PROGRAM_DIR)/$(TARGET).elf \
+          $(PROGRAM_DIR)/$(TARGET).bin \
           $(PROGRAM_DIR)/$(TARGET).asm \
+          $(OUTPUT_DIR)/$(TARGET)/build-coe-stamp  \
           PRINT_SIZE
 
 $(RELEASE_STARTUP_DIR)/build-setting-stamp: $(RELEASE_DIR)/setting.mk $(PROGRAM_DIR)/Makefile $(SDK_ROOT)/make_env_var $(SDK_ROOT)/Makefile
@@ -132,6 +134,9 @@ $(PROGRAM_DIR)/$(TARGET).asm: $(PROGRAM_DIR)/$(TARGET).elf
 
 PRINT_SIZE: $(PROGRAM_DIR)/$(TARGET).elf
 	$(SIZE) $(PROGRAM_DIR)/$(TARGET).elf
+
+$(PROGRAM_DIR)/$(TARGET).bin: $(PROGRAM_DIR)/$(TARGET).elf
+	$(OBJCOPY) -O binary $(PROGRAM_DIR)/$(TARGET).elf $(PROGRAM_DIR)/$(TARGET).bin
 
 $(OUTPUT_DIR)/$(TARGET)/build-coe-stamp: $(PROGRAM_DIR)/$(TARGET).elf
 	rm -rf $(OUTPUT_DIR)/$(TARGET)

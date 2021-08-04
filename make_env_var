@@ -3,7 +3,7 @@ BOARD ?= LS_Board
 RELEASE ?= spike64
 SOFTWARE ?= software
 PROGRAM ?= coremark
-HOST_IP := 192.168.168.110
+HOST_IP := localhost
 
 #### no change ####
 LINK_TARGET ?= link

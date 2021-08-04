@@ -102,7 +102,12 @@ _start:
         smp_resume(t0, t1)
 
         csrr a0, mhartid
-        bnez a0, 2f
+        li t0, 1
+        beq a0, t0, 2f  // hart 1
+        li t0, 2
+        beq a0, t0, 3f  // hart 2
+        li t0, 3
+        beq a0, t0, 4f  // hart 3
 #endif
 
         auipc ra, 0
@@ -122,13 +127,14 @@ _start:
         j 1b
 
 #if defined(ENABLE_SMP)
+     ####### hart-1 ########
 2:
         la t0, trap_entry
         csrw mtvec, t0
 
         csrr a0, mhartid
         la t1, _sp
-        slli t0, a0, 10
+        slli t0, a0, 12    ## stack size = 4KB
         sub sp, t1, t0
 
         auipc ra, 0
@@ -144,6 +150,56 @@ _start:
 
 1:
         j 1b
+
+     ####### hart-2 ########
+3:
+        la t0, trap_entry
+        csrw mtvec, t0
+
+        csrr a0, mhartid
+        la t1, _sp
+        slli t0, a0, 12   ## stack size = 4KB
+        sub sp, t1, t0
+
+        auipc ra, 0
+        addi sp, sp, -16
+#if __riscv_xlen == 32
+        sw ra, 8(sp)
+#else
+        sd ra, 8(sp)
+#endif
+
+        call thirdly_main
+        tail exit
+
+1:
+        j 1b
+
+     ####### hart-3 ########
+4:
+        la t0, trap_entry
+        csrw mtvec, t0
+
+        csrr a0, mhartid
+        la t1, _sp
+        slli t0, a0, 12   ## stack size = 4KB
+        sub sp, t1, t0
+
+        auipc ra, 0
+        addi sp, sp, -16
+#if __riscv_xlen == 32
+        sw ra, 8(sp)
+#else
+        sd ra, 8(sp)
+#endif
+
+        call fourthly_main
+        tail exit
+
+1:
+        j 1b
+
+
 #endif
         .cfi_endproc
 
@@ -169,3 +225,25 @@ tohost: .dword 0
         .globl fromhost
 fromhost: .dword 0 
 #endif
+         
+         .section .text
+         .globl secondary_main
+         .weak secondary_main
+secondary_main:
+1:
+         j 1b
+
+         .globl thirdly_main
+         .weak thirdly_main
+thirdly_main:
+1:
+         j 1b
+
+
+         .globl fourthly_main
+         .weak fourthly_main
+fourthly_main:
+1:
+         j 1b
+
+
