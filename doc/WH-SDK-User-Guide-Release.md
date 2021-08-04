@@ -1,6 +1,6 @@
 # wh_sdk使用说明
 
-`wh_sdk`用于`WH`系列处理器的应用开发和硬件仿真，目前支持`Newlib`函数库，支持`FT2232/Olimex/Jlink`下载，使用的工具链为`RISC-V GNU Toolchain`，使用的下载器是`RISC-V OpenOCD`，在使用`wh_sdk`之前，需要安装`RISC-V GNU Toolchain`、`RISC-V OpenOCD`以及将ELF文件转成HEX文件的工具`elf2hex`，这些工具的下载、编译步骤可以看文档[How-to-build-toolchains](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/How-to-build-toolchains.pdf)
+`wh_sdk`用于`WH`系列处理器的应用开发和硬件仿真，目前支持`Newlib`函数库，支持`FT2232/Olimex/Jlink`下载，使用的工具链为`RISC-V GNU Toolchain`，使用的下载器是`RISC-V OpenOCD`，在使用`wh_sdk`之前，需要安装`RISC-V GNU Toolchain`、`RISC-V OpenOCD`以及将ELF文件转成HEX文件的工具`elf2hex`，这些工具的下载、编译步骤可以看文档[How-to-build-toolchains](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/How-to-build-toolchains.md)
 
 ## 1. wh_sdk目录架构描述
 
