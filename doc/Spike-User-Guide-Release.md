@@ -2,7 +2,7 @@
 
 ## 1. 下载、编译spike和pk
 
-下载、编译步骤可以看文档[How-to-build-toolchains](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/How-to-build-toolchains.pdf)，这里不再赘述。
+下载、编译步骤可以看文档[How-to-build-toolchains](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/How-to-build-toolchains.md)，这里不再赘述。
 
 ## 2. 使用spike+pk跑helloworld
 

@@ -1,6 +1,6 @@
 # wh_sdk开发文档
 
-本文档主要针对如何对`wh_sdk`中某些文件进行特定的修改，以适应特定的需求。关于`wh_sdk`的基本使用方法已经在文档[WH-SDK-User-Guide-Release](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/WH-SDK-User-Guide-Release.pdf)中给出，此处不再叙述。
+本文档主要针对如何对`wh_sdk`中某些文件进行特定的修改，以适应特定的需求。关于`wh_sdk`的基本使用方法已经在文档[WH-SDK-User-Guide-Release](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/WH-SDK-User-Guide-Release.md)中给出，此处不再叙述。
 
 ## 1. wh_sdk的PLATFORM参数	
 
@@ -8,7 +8,7 @@
 
 ## 2. wh_bsp目录结构
 
-`wh_sdk`的整体目录已经在文档[WH-SDK-User-Guide-Release](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/WH-SDK-User-Guide-Release.pdf)中列出，此处不再叙述，下面列一下`wh_bsp`目录：
+`wh_sdk`的整体目录已经在文档[WH-SDK-User-Guide-Release](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/WH-SDK-User-Guide-Release.md)中列出，此处不再叙述，下面列一下`wh_bsp`目录：
 
 ```
 * wh_bsp/            
@@ -62,7 +62,7 @@
 
   为了适应不同配置的处理器实现，`wh_sdk`创建了一个`setting.mk`文件，用户直接修改`setting.mk`文件就可以对整个`wh_sdk`环境进行修改。
 
-  >[WH-SDK-User-Guide-Release](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/WH-SDK-User-Guide-Release.pdf)文档中有介绍如何修改`settting.mk`文件；
+  >[WH-SDK-User-Guide-Release](https://github.com/UCTECHIP/wh_sdk/blob/master/doc/WH-SDK-User-Guide-Release.md)文档中有介绍如何修改`settting.mk`文件；
   >
   >`WH32_DDR`、`WH64_DDR`目录下,除了`setting.mk`文件外，其他的文件都是临时文件，在每次编译之前都会被重新生成；
 

@@ -9,7 +9,7 @@
 	* doc/									// SDK使用文档、API文档
 		* LS_SOC_API.pdf						// SoC API
 		* WH_CORE_API.pdf						// Core API
-		* WH-SDK-User-Guide-Release.pdf			// 使用手册
+		* WH-SDK-User-Guide-Release			// 使用手册
 	* LICENSE
 	* make_env_var							// Makefile脚本文件的环境变量
 	* Makefile								// Makefile脚本文件
