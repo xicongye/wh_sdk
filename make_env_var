@@ -1,6 +1,6 @@
 #### user change ####
 BOARD ?= LS_Board
-RELEASE ?= spike64
+RELEASE ?= gem5
 SOFTWARE ?= software
 PROGRAM ?= coremark
 HOST_IP := localhost

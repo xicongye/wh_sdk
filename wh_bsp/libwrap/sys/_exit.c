@@ -12,5 +12,10 @@ void __wrap__exit(int code)
   write_hex(STDERR_FILENO, code);
   write(STDERR_FILENO, "\n", 1);
 
+#ifdef ON_GEM5
+  ns16550a_putchar(4);
+#else
   for (;;);
+#endif
+
 }

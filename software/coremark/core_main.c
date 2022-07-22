@@ -20,6 +20,7 @@ El Dorado Hills, CA, 95762
 	This file contains the framework to acquire a block of memory, seed initial parameters, tun t he benchmark and report the results.
 */
 #include "coremark.h"
+//#include "gem5/m5ops.h"
 
 /* Function: iterate
 	Run the benchmark for a specified number of iterations.
@@ -35,6 +36,10 @@ El Dorado Hills, CA, 95762
 static ee_u16 list_known_crc[]   =      {(ee_u16)0xd4b0,(ee_u16)0x3340,(ee_u16)0x6a79,(ee_u16)0xe714,(ee_u16)0xe3c1};
 static ee_u16 matrix_known_crc[] =      {(ee_u16)0xbe52,(ee_u16)0x1199,(ee_u16)0x5608,(ee_u16)0x1fd7,(ee_u16)0x0747};
 static ee_u16 state_known_crc[]  =      {(ee_u16)0x5e47,(ee_u16)0x39bf,(ee_u16)0xe5a4,(ee_u16)0x8e3a,(ee_u16)0x8d84};
+
+uint64_t start_inst, stop_inst;
+uint64_t start_cycle, stop_cycle;
+
 void *iterate(void *pres) {
 	ee_u32 i;
 	ee_u16 crc;
@@ -45,13 +50,31 @@ void *iterate(void *pres) {
 	res->crcmatrix=0;
 	res->crcstate=0;
 
+
+        start_inst = rdinstret();
+	start_cycle = rdcycle();
+
 	for (i=0; i<iterations; i++) {
+//                if(i == 3)
+//                {
+//                  m5_work_begin(0, 0);
+//                }
 		crc=core_bench_list(res,1);
 		res->crc=crcu16(crc,res->crc);
 		crc=core_bench_list(res,-1);
 		res->crc=crcu16(crc,res->crc);
 		if (i==0) res->crclist=res->crc;
+
+//                if(i == 3)
+//                {
+//                  m5_work_end(0, 0);
+//                  m5_exit(0);
+//                }
 	}
+
+        stop_inst = rdinstret();
+	stop_cycle = rdcycle();
+
 	return NULL;
 }
 
@@ -338,6 +361,9 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 #endif
                         ee_printf("\n\nScore: %6.3f CoreMark/MHz", (default_num_contexts*results[0].iterations/time_in_secs(total_time))/(get_cpu_frequency()/1000000));
 			ee_printf("\n");
+
+                        ee_printf("start_inst = %lld, stop_inst = %lld, delta_inst = %lld\n", start_inst, stop_inst, stop_inst-start_inst);
+                        ee_printf("start_cycle = %lld, stop_cycle = %lld, delta_cycle = %lld\n", start_cycle, stop_cycle, stop_cycle-start_cycle);
 		}
 #endif
 	}

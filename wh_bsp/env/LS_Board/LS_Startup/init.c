@@ -13,6 +13,11 @@ void _init(void)
    #ifdef ON_BOARD
     uart_init(115200);
    #endif
+
+   #ifdef ON_GEM5
+    ns16550a_uart_init();
+   #endif
+
  write_csr(mtvec, &trap_entry);
 #endif
 }

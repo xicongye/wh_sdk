@@ -243,14 +243,13 @@ static void vprintfmt(void (*putch)(int, void**), void **putdat, const char *fmt
 
 int __wrap_printf(const char* fmt, ...)
 {
-#ifdef ON_BOARD
   va_list ap;
   va_start(ap, fmt);
 
   vprintfmt((void*)putchar, 0, fmt, ap);
 
   va_end(ap);
-#endif
+
   return 0; // incorrect return value, but who cares, anyway?
 }
 

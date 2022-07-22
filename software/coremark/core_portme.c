@@ -39,6 +39,45 @@ Original Author: Shay Gal-on
 	volatile ee_s32 seed5_volatile=0;
 
 	unsigned long long timebase = 0;
+
+
+unsigned long long rdcycle(void)
+{
+    unsigned long long val = 0;
+#if __riscv_xlen == 32
+    unsigned long hi, hi1, lo;
+
+    asm volatile ("csrr %0, cycleh" : "=r"(hi));
+    asm volatile ("csrr %0, cycle" : "=r"(lo));
+    asm volatile ("csrr %0, cycleh" : "=r"(hi1));
+    if (hi == hi1) {
+        val = ((unsigned long long)hi << 32) | lo;
+    }
+#else
+    asm volatile ("csrr %0, cycle" : "=r"(val));
+#endif
+    return val;
+}
+
+unsigned long long rdinstret(void)
+{
+    unsigned long long val = 0;
+#if __riscv_xlen == 32
+    unsigned long hi, hi1, lo;
+
+    asm volatile ("csrr %0, instreth" : "=r"(hi));
+    asm volatile ("csrr %0, instret" : "=r"(lo));
+    asm volatile ("csrr %0, instreth" : "=r"(hi1));
+    if (hi == hi1) {
+        val = ((unsigned long long)hi << 32) | lo;
+    }
+#else
+    asm volatile ("csrr %0, instret" : "=r"(val));
+#endif
+    return val;
+}
+
+
 /* Porting : Timing functions
 	How to capture time and convert to seconds must be ported to whatever is supported by the platform.
 	e.g. Read value from on board RTC, read value from cpu clock cycles performance counter etc.
@@ -53,11 +92,11 @@ CORETIMETYPE barebones_clock() {
 	Use lower values to increase resolution, but make sure that overflow does not occur.
 	If there are issues with the return value overflowing, increase this value.
 	*/
-#define GETMYTIME(_t) (*_t=barebones_clock())
+#define GETMYTIME(_t) (*_t = rdcycle())
 #define MYTIMEDIFF(fin,ini) ((fin)-(ini))
 #define TIMER_RES_DIVIDER 1
 #define SAMPLE_TIME_IMPLEMENTATION 1
-#define EE_TICKS_PER_SEC (timebase/ TIMER_RES_DIVIDER)
+#define EE_TICKS_PER_SEC 50000000
 
 /** Define Host specific (POSIX), or target specific global time variables. */
 static CORETIMETYPE start_time_val, stop_time_val;

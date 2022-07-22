@@ -52,6 +52,8 @@ else ifeq ($(PLATFORM), SPIKE)
 CFLAGS += -DON_SPIKE
 else ifeq ($(PLATFORM), VCS)
 CFLAGS += -DON_VCS
+else ifeq ($(PLATFORM), GEM5)
+CFLAGS += -DON_GEM5
 endif
 
 
@@ -151,6 +153,14 @@ $(OUTPUT_DIR)/$(TARGET)/build-coe-stamp: $(PROGRAM_DIR)/$(TARGET).elf
 	$(SCRIPT_DIR)/gen_bin.pl $(OUTPUT_DIR)/$(TARGET)/dpram_32.coe > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_32_bin_mem.coe
 	$(SCRIPT_DIR)/gen_bin.pl $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_bin_mem.coe
 	$(SCRIPT_DIR)/gen_bin.pl $(OUTPUT_DIR)/$(TARGET)/dpram_128.coe > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_128_bin_mem.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\8/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_0.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\7/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_1.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\6/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_2.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\5/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_3.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\4/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_4.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\3/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_5.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\2/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_6.coe
+	cat $(OUTPUT_DIR)/$(TARGET)/dpram_64.coe | sed -r 's/(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)(\w\w)/\1/' > $(OUTPUT_DIR)/$(TARGET)/$(TARGET)_64_hex_byte_mem_7.coe
 	touch $(OUTPUT_DIR)/$(TARGET)/build-coe-stamp
 
 .PHONY: clean

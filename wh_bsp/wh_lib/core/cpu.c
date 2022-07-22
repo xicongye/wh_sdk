@@ -77,20 +77,39 @@ unsigned long long get_cyclecount(void)
 #endif
 }
 
-/********************************************************************
-* Function Name :   testcase_status
-* Description   :   
-* Input         :   none
-* Output        :   none
-* Return        :   none
-********************************************************************/
-void testcase_status(uint32_t id, uint32_t status)
+unsigned long long get_mcyclecount(void)
 {
-    *(uint32_t*)(0x40000000) = id;
-    *(uint32_t*)(0x40000004) = status;
+    unsigned long long val = 0;
+#if __riscv_xlen == 32
+    unsigned long hi, hi1, lo; 
 
-    if(status == FAIL)  
-      while(1);
+    asm volatile ("csrr %0, mcycleh" : "=r"(hi));
+    asm volatile ("csrr %0, mcycle" : "=r"(lo));
+    asm volatile ("csrr %0, mcycleh" : "=r"(hi1));
+    if (hi == hi1) {
+        val = ((unsigned long long)hi << 32) | lo; 
+    }   
+#else
+    asm volatile ("csrr %0, mcycle" : "=r"(val));
+#endif
+    return val;
 }
 
+unsigned long long get_minstcount(void)
+{
+    unsigned long long val = 0;
+#if __riscv_xlen == 32
+    unsigned long hi, hi1, lo; 
+
+    asm volatile ("csrr %0, minstreth" : "=r"(hi));
+    asm volatile ("csrr %0, minstret" : "=r"(lo));
+    asm volatile ("csrr %0, minstreth" : "=r"(hi1));
+    if (hi == hi1) {
+        val = ((unsigned long long)hi << 32) | lo; 
+    }   
+#else
+    asm volatile ("csrr %0, minstret" : "=r"(val));
+#endif
+    return val;
+}
 

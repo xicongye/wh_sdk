@@ -12,5 +12,6 @@
 #include "device/oled.h"
 #include "device/oledfont.h"
 #include "device/vga.h"
+#include "device/ns16550a.h"
 #endif /* SDJ2102_DEVICE_H */
 

@@ -42,7 +42,7 @@ int putchar(int ch)
     buflen = 0;
   }
 #elif defined (ON_VCS) 
-   uint8_t * ch_ptr = (uint8_t*)(0x41000000);
+   uint8_t * ch_ptr = (uint8_t*)(0x80000000);
 
    *ch_ptr = (uint8_t)(ch);
    asm("nop");
@@ -50,6 +50,8 @@ int putchar(int ch)
    asm("nop");
 #elif defined (ON_BOARD)
    uart_putchar(ch);
+#elif defined (ON_GEM5)
+   ns16550a_putchar(ch);
 #endif
 
   return 0;

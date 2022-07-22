@@ -65,6 +65,7 @@ RISCV_READELF := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-readelf)
 RISCV_AS      := $(abspath $(RISCV_PATH)/bin/$(CROSS_COMPILE)-as)
 SPIKE         := $(abspath $(RISCV_PATH)/bin/spike)
 RISCV_ELF2HEX := $(abspath $(RISCV_PATH)/bin/riscv64-unknown-elf-elf2hex)
+
 endif
 
 ifeq ($(RISCV_OPENOCD_PATH),)
@@ -119,10 +120,10 @@ upload:
 	$(RISCV_GDB) $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf $(GDB_UPLOAD_ARGS) $(GDB_UPLOAD_CMDS)
 	
 run_sim:
-	$(SPIKE) --isa=$(RISCV_ARCH) --varch=$(VARCH) -m0x40000000:0x50000000  $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
+	$(SPIKE) --isa=$(RISCV_ARCH) --varch=$(VARCH) $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
 
 run_spike:
-	$(SPIKE) --isa=$(RISCV_ARCH) --varch=$(VARCH) --rbb-port=9824 -m0x40000000:0x50000000  $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
+	$(SPIKE) --isa=$(RISCV_ARCH) --varch=$(VARCH) --rbb-port=9824 $(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
 
 run_openocd:
 	$(RISCV_OPENOCD) $(OPENOCDARGS)
@@ -206,6 +207,33 @@ dist-clean:
 	rm -rf wh_bsp/env/LS_Board/WH_B_EXT/startup
 	rm -rf wh_bsp/env/LS_Board/WH_SETTING/build*
 	rm -rf wh_bsp/env/LS_Board/WH_SETTING/startup
+
+GEM5 := /home/yexicong/work/GEM5/stable/gem5/build/RISCV/gem5.opt
+
+DEBUG_FLAG := #--debug-file=fs.log \
+		#--debug-flag=MinorTrace
+
+FS_SCRIPT := /home/yexicong/work/GEM5/stable/gem5/configs/example/riscv/fs_linux.py
+#CPU_TYPE := --cpu-type=AtomicSimpleCPU
+#CPU_TYPE := --cpu-type=MinorCPU
+CPU_TYPE := --cpu-type=AutoMan
+OPTIONS := --cpu-clock=50MHz --sys-clock=50MHz \
+		--caches \
+		--l1i_size '32kB' --l1i_assoc 4 \
+		--l1d_size '32kB' --l1d_assoc 4 \
+
+
+run_gem5_fs:
+	rm -rf m5out
+	$(GEM5) \
+	$(DEBUG_FLAG) \
+	$(FS_SCRIPT) \
+	$(CPU_TYPE) \
+	$(OPTIONS) \
+	--kernel=$(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
+
+run_m5_term:
+	/home/yexicong/work/GEM5/stable/gem5/util/term/m5term localhost 3456
 
 scp:
 	scp -r $(OUTPUT_DIR)/$(TARGET)   $(USER)@192.168.168.197:~/project/WH/workspace/software 
