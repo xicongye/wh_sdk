@@ -55,21 +55,21 @@ void *iterate(void *pres) {
 	start_cycle = rdcycle();
 
 	for (i=0; i<iterations; i++) {
-//                if(i == 3)
-//                {
-//                  m5_work_begin(0, 0);
-//                }
+#ifdef ON_GEM5
+                if(i == 3)
+                  m5_dump_reset_stats(0,0);
+#endif
+
 		crc=core_bench_list(res,1);
 		res->crc=crcu16(crc,res->crc);
 		crc=core_bench_list(res,-1);
 		res->crc=crcu16(crc,res->crc);
 		if (i==0) res->crclist=res->crc;
 
-//                if(i == 3)
-//                {
-//                  m5_work_end(0, 0);
-//                  m5_exit(0);
-//                }
+#ifdef ON_GEM5
+                if(i == 3)
+                  m5_exit(0);
+#endif
 	}
 
         stop_inst = rdinstret();

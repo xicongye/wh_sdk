@@ -1,5 +1,5 @@
-RISCV_ARCH := rv64im
-RISCV_ABI  := lp64
+RISCV_ARCH := rv64gc
+RISCV_ABI  := lp64d
 MEM_BASE   := 0x80000000
 MEM_SIZE   := 128K
 DTIM       := 0

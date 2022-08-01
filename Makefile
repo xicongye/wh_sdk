@@ -208,20 +208,27 @@ dist-clean:
 	rm -rf wh_bsp/env/LS_Board/WH_SETTING/build*
 	rm -rf wh_bsp/env/LS_Board/WH_SETTING/startup
 
-GEM5 := /home/yexicong/work/GEM5/stable/gem5/build/RISCV/gem5.opt
+START_POINT := 28658280000
+END_POINT := 28800360000
 
-DEBUG_FLAG := #--debug-file=fs.log \
-		#--debug-flag=MinorTrace
+GEM5_PATH := /home/yexicong/work/GEM5/stable/gem5
 
-FS_SCRIPT := /home/yexicong/work/GEM5/stable/gem5/configs/example/riscv/fs_linux.py
-#CPU_TYPE := --cpu-type=AtomicSimpleCPU
+GEM5 := $(GEM5_PATH)/build/RISCV/gem5.opt --debug-start=$(START_POINT) --debug-end=$(END_POINT)
+
+DEBUG_FLAG := --debug-flag=MinorTrace \
+                --debug-file=fs.log \
+		--debug-flag=Fetch \
+		--debug-flag=MinorExecute \
+
+
+FS_SCRIPT := $(GEM5_PATH)/configs/example/riscv/fs_linux.py
 #CPU_TYPE := --cpu-type=MinorCPU
-CPU_TYPE := --cpu-type=AutoMan
+#CPU_TYPE := --cpu-type=AutoMan
+CPU_TYPE := --cpu-type=GoGo
 OPTIONS := --cpu-clock=50MHz --sys-clock=50MHz \
 		--caches \
 		--l1i_size '32kB' --l1i_assoc 4 \
 		--l1d_size '32kB' --l1d_assoc 4 \
-
 
 run_gem5_fs:
 	rm -rf m5out
@@ -233,7 +240,7 @@ run_gem5_fs:
 	--kernel=$(SOFTWARE)/$(PROGRAM)/$(TARGET).elf
 
 run_m5_term:
-	/home/yexicong/work/GEM5/stable/gem5/util/term/m5term localhost 3456
+	$(GEM5_PATH)/util/term/m5term localhost 3456
 
 scp:
 	scp -r $(OUTPUT_DIR)/$(TARGET)   $(USER)@192.168.168.197:~/project/WH/workspace/software 
